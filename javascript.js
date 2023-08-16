@@ -1,4 +1,5 @@
-function loadAndReadFile(link){
+var data = [];
+function loadAndReadFile(link) {
  var fileUrl = link + '&download=1';
 
         $.ajax({
@@ -76,7 +77,7 @@ function readFile(file) {
 		console.log("found keyword at: " + keywordFound);
 		var levelFound = 0;
 		var level;
-		var data = [];
+		
 		var currentParents = [];
 		for (var i = keywordFound; i < lines.length; i++) {
 			var line = lines[i].trim();
@@ -138,6 +139,27 @@ function readFile(file) {
   reader.readAsArrayBuffer(file);
 }
 
+function readDiemChuan() {
+	var excelFileName = 'Diemchuan.xlsx';
+
+	$.ajax({
+		url: excelFileName,
+		method: 'GET',
+		responseType: 'arraybuffer',
+		success: function (data) {
+			var workbook = XLSX.read(data, { type: 'array' });
+			var sheetName = workbook.SheetNames[0];
+			var sheet = workbook.Sheets[sheetName];
+
+			var excelArray = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+			console.log(excelArray);
+		},
+		error: function (xhr, status, error) {
+			console.error('Error loading the Excel file:', error);
+		}
+	});
+}
+
 $(document).ready(function () {
 	$("#fileInput").change(function () {
 	  var file = this.files[0];
@@ -148,7 +170,13 @@ $(document).ready(function () {
 		 readFile($("#fileInput")[0].files[0]);
 	});
 	
-	
+	$("#Export").click(function () {
+		var treeData = $('#output').jstree(true).get_json('#', { flat: true });
+		console.log(treeData);
+		readDiemChuan();
+	});
+
+
 	var inputArray = ["TIÊU CHUẨN", "Mục ", "Phần "]; // Array to store the input elements
 
   // Loop through each input element
