@@ -140,14 +140,17 @@ function readFile(file) {
 }
 
 function readDiemChuan() {
-	var excelFileName = 'Diemchuan.xlsx';
+	var excelFileName = 'DiemChuan.xlsx';
 
 	$.ajax({
 		url: excelFileName,
 		method: 'GET',
-		responseType: 'arraybuffer',
+		xhrFields: {
+			responseType: 'arraybuffer'
+		},
 		success: function (data) {
-			var workbook = XLSX.read(data, { type: 'array' });
+			var dataUint8 = new Uint8Array(data); // Convert data to Uint8Array
+			var workbook = XLSX.read(dataUint8, { type: 'array' });
 			var sheetName = workbook.SheetNames[0];
 			var sheet = workbook.Sheets[sheetName];
 
@@ -159,7 +162,6 @@ function readDiemChuan() {
 		}
 	});
 }
-
 $(document).ready(function () {
 	$("#fileInput").change(function () {
 	  var file = this.files[0];
@@ -171,8 +173,8 @@ $(document).ready(function () {
 	});
 	
 	$("#Export").click(function () {
-		var treeData = $('#output').jstree(true).get_json('#', { flat: true });
-		console.log(treeData);
+		// var treeData = $('#output').jstree(true).get_json('#', { flat: true });
+		// console.log(treeData);
 		readDiemChuan();
 	});
 
