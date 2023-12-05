@@ -180,3 +180,32 @@ body
 		width: 100%;
 	}
 }
+/* .modal p { 
+	margin: 1em 0; 
+} */
+
+.modal a.close-modal {
+	border: none;
+}
+
+.modal a.close-modal {
+	top: 0px !important;
+	right: 0px !important;
+	-webkit-filter: invert(100%);
+}
+
+.modal .modal-header {
+	text-align: center;
+}
+
+.modal .modal-body {
+	white-space: pre;
+}
+
+.modal .modal-footer{
+	text-align: center;
+}
+
+.flex-right{
+	margin-left : auto
+}

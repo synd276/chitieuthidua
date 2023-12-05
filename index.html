@@ -1,50 +1,91 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-	<script src="https://kit.fontawesome.com/980cf330d1.js" crossorigin="anonymous"></script>
-	<!-- Required meta tags -->
-    <meta charset="utf-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<title>Chỉ tiêu thi đua</title>
-	<!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    <!-- Custom CSS -->
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<!-- Fontawesome CSS -->
-	<link rel="stylesheet" type="text/css" href="css/all.min.css">
-	
-</head>
+	<head>
+		<script src="https://kit.fontawesome.com/980cf330d1.js" crossorigin="anonymous"></script>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>Chỉ tiêu thi đua</title>
+		<!-- Bootstrap -->
+		<!-- Latest compiled and minified CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Latest compiled JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- Custom CSS -->
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<!-- Fontawesome CSS -->
+		<link rel="stylesheet" type="text/css" href="css/all.min.css">
+		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" /> -->
+
+	</head>
 	<body >
+		<div id="setting" class="offcanvas offcanvas-end">
+			<div class="offcanvas-header">
+				<h1 class="offcanvas-title">Cấu hình</h1>
+				<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+			  </div>
+			  <div class="offcanvas-body">
+				<input type="text" id="level1"  />
+				<input type="text" id="level2"  />
+				<input type="text" id="level3"  />
+				<!-- <button class="btn btn-secondary" type="button">A Button</button> -->
+  			</div>
+		</div>
 			<div class="container">
 				<div class="text_title">
 					<h1>CHỈ TIÊU THI ĐUA</h1>
 				</div>
-				
-				<div>
-					<input type="file" id="fileInput" accept=".docx" />
-					<button id="readButton">Đọc File</button>
-					<input type="text" id="level1"  />
-					<input type="text" id="level2"  />
-					<input type="text" id="level3"  />
-					
-				</div>
-				<hr/>
-				<div id="output"></div>
+				<div class="action d-flex">
+					<div class="pull-left">
+						<label for="fileInput" class="btn btn-outline-light">Chọn file báo cáo (Docx)</label>
+						<input type="file" id="fileInput" accept=".docx" style="display:none;" />
+						<!-- <button id="readButton">Đọc File</button> -->
+						
+						<a id="btnShowModal" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-primary disabled ">Xem chỉ tiêu thi đua</a>
+					</div>
+					<div class="flex-right">
+						<button class="btn btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#setting">Cấu hình</button>
 
+						
+					</div>
+				</div>
+				<!-- <button id="Export">Xuất biên bản</button> -->
+				<div>
+					<hr/>
+					<div id="output"></div>
+				</div>
 			</div>
-		
+			<div id="myModal" class="modal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Các chỉ tiêu thi đua </h4>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+						</div>
+						<div id="myModal-body" class="modal-body">
+							
+						</div>
+						<div class="d-flex justify-content-center p-lg-3">
+							<button Id="btnCopy" class="btn btn-info">Copy nội dung</button>
+						</div>
+				<!-- <a href="#" rel="modal:close">Close</a> -->
+					</div>
+				</div>
+			</div>
 	</body>
 </html>
 
 <!-- Fontawesome JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 	<script src="cdnjs/mammoth.browser.min.js"></script>
 
 	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
 
 	<script type="text/javascript" src="js/all.min.js"></script>
 	<script src="javascript.js"></script>
