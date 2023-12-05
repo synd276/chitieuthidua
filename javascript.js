@@ -1,166 +1,170 @@
 var reportData = [];
 var excelArrayDiemChuan;
-function loadAndReadFile(link) {
- var fileUrl = link + '&download=1';
+var readFileInProgress = false;
 
-        $.ajax({
-          url: fileUrl,
-          type: 'GET',
-          dataType: 'binary',
-          responseType: 'arraybuffer',
-          processData: false,
-          success: function (data) {
-            var arrayBufferView = new Uint8Array(data);
-            var fileBlob = new Blob([arrayBufferView], { type: 'application/octet-stream' });
-            readFileBlob(fileBlob);
-          },
-          error: function (xhr, status, error) {
-            console.error(error);
-          }
-        });
-      }
-function readFileBlob(file) {
-        var reader = new FileReader();
+// function loadAndReadFile(link) {
+//  var fileUrl = link + '&download=1';
 
-        reader.onload = function (e) {
-          var arrayBuffer = e.target.result;
-          var mammothOptions = { includeDefaultStyleMap: true };
+//         $.ajax({
+//           url: fileUrl,
+//           type: 'GET',
+//           dataType: 'binary',
+//           responseType: 'arraybuffer',
+//           processData: false,
+//           success: function (data) {
+//             var arrayBufferView = new Uint8Array(data);
+//             var fileBlob = new Blob([arrayBufferView], { type: 'application/octet-stream' });
+//             readFileBlob(fileBlob);
+//           },
+//           error: function (xhr, status, error) {
+//             console.error(error);
+//           }
+//         });
+//       }
+// function readFileBlob(file) {
+//         var reader = new FileReader();
 
-          var result = mammoth.extractRawText({ arrayBuffer: arrayBuffer }, mammothOptions)
-            .then(function (result) {
-              var text = result.value;
-              var lines = text.split('\n');
-              var data = [];
+//         reader.onload = function (e) {
+//           var arrayBuffer = e.target.result;
+//           var mammothOptions = { includeDefaultStyleMap: true };
 
-              lines.forEach(function (line) {
-                data.push({ text: line });
-              });
+//           var result = mammoth.extractRawText({ arrayBuffer: arrayBuffer }, mammothOptions)
+//             .then(function (result) {
+//               var text = result.value;
+//               var lines = text.split('\n');
+//               var data = [];
 
-              $("#output").jstree({
-                core: {
-                  data: data,
-                },
-              });
-            });
-        };
+//               lines.forEach(function (line) {
+//                 data.push({ text: line });
+//               });
 
-        reader.readAsArrayBuffer(file);
-      }      
+//               $("#output").jstree({
+//                 core: {
+//                   data: data,
+//                 },
+//               });
+//             });
+//         };
+
+//         reader.readAsArrayBuffer(file);
+//       }      
 async function readFile(file) {
-  var reader = new FileReader();
+	// console.log("readFile");
+  	var reader = new FileReader();
 
-  reader.onload = function (e) {
-    var arrayBuffer = e.target.result;
-    var options = { arrayBuffer: arrayBuffer };
+  	reader.onload = function (e) {
+		var arrayBuffer = e.target.result;
+		var options = { arrayBuffer: arrayBuffer };
 
-    // Use mammoth.js to extract the text content from the Word file
-    mammoth.extractRawText(options)
-      .then(function (result) {
-        var text = result.value;
-        var lines = text.split("\n");
-		var keyLevel1 = $("#level1").val();
-		var keyLevel2 = $("#level2").val();
-		var keyLevel3 = $("#level3").val();
-		
-		var keywordFound = 0;
-		//tìm từ khóa đầu tiên
-		for (var keywordFound = 0; keywordFound < lines.length; keywordFound++) {
-			if (lines[keywordFound].includes(keyLevel1)) {
-				break;
-			  }
-		}
-		if (keywordFound >= lines.length) {
-			alert('Không tìm thấy từ khóa: '+ keyLevel1);
-			return;
-		}
-		// console.log("found keyword at: " + keywordFound);
-		// var levelFound = 0;
-		var level;
-		var iDiemChuan = 1;
-		var currentParents = [];
-		var score;
-		var diemChuan;
-		//run throught every line of the file 
-		for (var i = keywordFound; i < lines.length; i++) {
-			var line = lines[i].trim();
-			level = 0;
-			if (line !== "") {
-			  
-				//checking key level
-				if (line.includes(keyLevel1)){
-					level = 1;
-				}
-				else if (line.includes(keyLevel2)){
-					level = 2;
-				}
-				else if (line.includes(keyLevel3)){
-					level = 3;
-				}
-				//else {
-				//	level = 4;
-				//}
-				score = 0;
-				diemChuan = undefined;
-				title = undefined;
-				if (level > 0) {
-					score = extractScores(line);
-					diemChuan = excelArrayDiemChuan[iDiemChuan][2];
-					iDiemChuan++;
-					title =  extractTitles(line);
-					if (title === undefined) {
-						// let previousTitle = extractTitles(lines[i-1].trim());
-						let previousTitle = currentParents[currentParents.length - 1].title;
-						let tempTitle = incrementLastNumber(previousTitle);
-						if (line.includes(tempTitle)) {
-							title = tempTitle;
-						}
-					}
-				}
-
-				var lineData = { title: title, text: line, level: level, score : score, benchmark : diemChuan };;
-				// var lineData = { level: level, score : score, benchmark : diemChuan };;
-
-
-				if (level === 0) {
-				  if (currentParents.length > 0) {
-					currentParents[currentParents.length - 1].children =
-					  currentParents[currentParents.length - 1].children || [];
-					currentParents[currentParents.length - 1].children.push(lineData);
-				  } else {
-					reportData.push(lineData);
-				  }
-				} else {
-				  while (currentParents.length >= level) {
-					currentParents.pop();
-				  }
-
-				  if (currentParents.length > 0) {
-					currentParents[currentParents.length - 1].children =
-					  currentParents[currentParents.length - 1].children || [];
-					currentParents[currentParents.length - 1].children.push(lineData);
-				  } else {
-					reportData.push(lineData);
-				  }
-
-				  currentParents.push(lineData);
+		// Use mammoth.js to extract the text content from the Word file
+		mammoth.extractRawText(options)
+		.then(function (result) {
+			var text = result.value;
+			var lines = text.split("\n");
+			var keyLevel1 = $("#level1").val();
+			var keyLevel2 = $("#level2").val();
+			var keyLevel3 = $("#level3").val();
+			
+			var keywordFound = 0;
+			//tìm từ khóa đầu tiên
+			for (var keywordFound = 0; keywordFound < lines.length; keywordFound++) {
+				if (lines[keywordFound].includes(keyLevel1)) {
+					break;
 				}
 			}
-		}
+			if (keywordFound >= lines.length) {
+				alert('Không tìm thấy từ khóa: '+ keyLevel1);
+				return;
+			}
+			// console.log("found keyword at: " + keywordFound);
+			// var levelFound = 0;
+			var level;
+			var iDiemChuan = 1;
+			var currentParents = [];
+			var score;
+			var diemChuan;
+			//run throught every line of the file 
+			for (var i = keywordFound; i < lines.length; i++) {
+				var line = lines[i].trim();
+				level = 0;
+				if (line !== "") {
+				
+					//checking key level
+					if (line.includes(keyLevel1)){
+						level = 1;
+					}
+					else if (line.includes(keyLevel2)){
+						level = 2;
+					}
+					else if (line.includes(keyLevel3)){
+						level = 3;
+					}
+					//else {
+					//	level = 4;
+					//}
+					score = 0;
+					diemChuan = undefined;
+					title = undefined;
+					if (level > 0) {
+						score = extractScores(line);
+						diemChuan = excelArrayDiemChuan[iDiemChuan][2];
+						iDiemChuan++;
+						title =  extractTitles(line);
+						if (title === undefined) {
+							// let previousTitle = extractTitles(lines[i-1].trim());
+							let previousTitle = currentParents[currentParents.length - 1].title;
+							let tempTitle = incrementLastNumber(previousTitle);
+							if (line.includes(tempTitle)) {
+								title = tempTitle;
+							}
+						}
+					}
 
-		// console.log(reportData);
-        $("#output").jstree({
-          core: {
-            data: reportData,
-          },
-        });
-      })
-      .catch(function (error) {
-        console.error('Error extracting text:', error);
-        $("#output").html("Error reading file.");
-      });
-  };
+					var lineData = { title: title, text: line, level: level, score : score, benchmark : diemChuan };;
+					// var lineData = { level: level, score : score, benchmark : diemChuan };;
 
-  reader.readAsArrayBuffer(file);
+
+					if (level === 0) {
+					if (currentParents.length > 0) {
+						currentParents[currentParents.length - 1].children =
+						currentParents[currentParents.length - 1].children || [];
+						currentParents[currentParents.length - 1].children.push(lineData);
+					} else {
+						reportData.push(lineData);
+					}
+					} else {
+					while (currentParents.length >= level) {
+						currentParents.pop();
+					}
+
+					if (currentParents.length > 0) {
+						currentParents[currentParents.length - 1].children =
+						currentParents[currentParents.length - 1].children || [];
+						currentParents[currentParents.length - 1].children.push(lineData);
+					} else {
+						reportData.push(lineData);
+					}
+
+					currentParents.push(lineData);
+					}
+				}
+			}
+
+			// console.log(reportData);
+			$("#output").jstree({
+			core: {
+				data: reportData,
+			},
+			});
+		})
+		.catch(function (error) {
+			console.error('Error extracting text:', error);
+			// $("#output").html("Error reading file.");
+		});
+	};
+
+  	reader.readAsArrayBuffer(file);
+	readFileInProgress = true;
 }
 
 function incrementLastNumber(inputString) {
@@ -265,7 +269,7 @@ function getResultReportLine(element, isBold = false) {
 		result = "<b>" + result+"</b>";
 	else 
 		result = '   ' + result;
-	console.log(result);
+	// console.log(result);
 	return result
 }
 
@@ -313,6 +317,7 @@ function PrintToModal(arrReportDetail) {
 }
 
 async function waitForReportDataAndPrintToModal() {
+	// console.log('waitForReportDataAndPrintToModal');
     return new Promise((resolve) => {
         async function checkData() {
             if (reportData !== null) {
@@ -336,37 +341,32 @@ async function waitForReportDataAndPrintToModal() {
 
 $(document).ready(function () {
 	readDiemChuan();
+
 	$('#output').on('loaded.jstree', function (event, data) {
 		// This callback is called when the tree has finished loading
-		console.log('jsTree has finished loading data');
+		// console.log('jsTree has finished loading data');
 		waitForReportDataAndPrintToModal();
 	});
-	$("#fileInput").change(async function () {
-		$('#btnShowModal').addClass('disabled');
-		let file = this.files[0];
-		reportData = [];
-		await readFile(file); // Trigger the function when a file is uploaded
-		// let validReportData = await waitForReportData();
-		
-		// console.log("waitForReportData: ");
-		// // console.log(validReportData);
-		// let resultReportData = filterObjectsByBenchmark(validReportData);
-		// console.log("resultReportData: ");
-		// console.log(resultReportData);
-		// let reportDetail = getResultReportDetails(resultReportData);
 
-		// PrintToModal(reportDetail);
-		// waitForReportDataAndPrintToModal();
+	$("#fileInput").change(function () {
+		if (!readFileInProgress) {
+			readFileInProgress = true;
+			$('#btnShowModal').addClass('disabled');
+			let file = this.files[0];
+			// console.log(file);
+			reportData = [];
+			readFile(file); // Trigger the function when a file is uploaded
+		}
 	});
 
-	$("#readButton").click(function () {
-		 readFile($("#fileInput")[0].files[0]);
+	// $("#readButton").click(function () {
+	// 	 readFile($("#fileInput")[0].files[0]);
 		 
-	});
+	// });
 	
-	$("#Export").click(function () {
-		waitForReportDataAndPrintToModal();
-	});
+	// $("#Export").click(function () {
+	// 	waitForReportDataAndPrintToModal();
+	// });
 
     // Attach a click event handler to close the modal
     $(".modal").click(function () {
@@ -381,14 +381,13 @@ $(document).ready(function () {
 
 	var inputArray = ["TIÊU CHUẨN", "Mục ", "Phần "]; // Array to store the input elements
 
-  // Loop through each input element
-  $("input[type='text']").each(function(index) {
-    $(this).val(inputArray[index]); // Set the value of the current input element
-  });
+	// Loop through each input element
+	$("input[type='text']").each(function(index) {
+		$(this).val(inputArray[index]); // Set the value of the current input element
+	});
 
-//   $("#myModal").modal({
-// 	closeClass: 'custom-close-modal',
-//   });
+
+	//copy
 	$('#btnCopy').on('click', function () {
 		// Get the content of the modal body
 		var modalBodyContent = $('#myModal-body').get(0);
