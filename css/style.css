@@ -182,7 +182,12 @@ body
 }
 #output { 
 	background-color: white;
-} 
+	white-space: pre;
+	
+}
+/* #output *{ 
+	font-family: 'Times New Roman', Times, serif;
+} */
 
 .modal a.close-modal {
 	border: none;

@@ -120,7 +120,7 @@ async function readFile(file) {
 						}
 					}
 
-					var lineData = { title: title, text: line, level: level, score : score, benchmark : diemChuan };;
+					var lineData = { title: title, text: line, level: level, score : score, benchmark : diemChuan };
 					// var lineData = { level: level, score : score, benchmark : diemChuan };;
 
 
