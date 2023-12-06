@@ -33,47 +33,62 @@
 				<!-- <button class="btn btn-secondary" type="button">A Button</button> -->
   			</div>
 		</div>
-			<div class="container">
-				<div class="text_title">
-					<h1>CHỈ TIÊU THI ĐUA</h1>
-				</div>
-				<div class="action d-flex">
-					<div class="pull-left">
-						<label for="fileInput" class="btn btn-outline-light">Chọn file báo cáo (Docx)</label>
-						<input type="file" id="fileInput" accept=".docx" style="display:none;" />
-						<!-- <button id="readButton">Đọc File</button> -->
-						
-						<a id="btnShowModal" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-primary disabled ">Xem chỉ tiêu thi đua</a>
-					</div>
-					<div class="flex-right">
-						<button class="btn btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#setting">Cấu hình</button>
+		<div class="container">
+			<div class="text_title">
+				<h1>CHỈ TIÊU THI ĐUA</h1>
+			</div>
+			<div class="action d-flex">
+				<div class="flex-left">
+					<!-- <label for="fileInput" class="btn btn-outline-light">Chọn file báo cáo (Docx)</label>
+					<input type="file" id="fileInput" accept=".docx" style="display:none;" /> -->
+					<!-- <button id="readButton">Đọc File</button> -->
+					<label for="fileScoreboard" class="btn btn-outline-light">Chọn file bảng điểm (Docx)</label>
+					<input type="file" id="fileScoreboard" accept=".docx" style="display:none;" />
+					<button Id="btnCopyOutput" class="btn btn-primary">Copy nội dung</button>
 
+
+					<!-- <a id="btnShowModal" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-primary disabled ">Xem chỉ tiêu thi đua</a> -->
+				</div>
+				<!-- <div class="flex-right">
+					<button class="btn btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#setting">Cấu hình</button>
+
+					
+				</div> -->
+			</div>
+			<!-- <button id="Export">Xuất biên bản</button> -->
+			<div>
+				<hr/>
+				<div id="output"></div>
+				<!-- <hr/> -->
+			</div>
+			<div>
+				<!-- <input	type="text" multiple="multiple" id="myInput" placeholder="Nhập danh sách chấm điểm"> -->
+				<!-- <textarea name="txtScoreList"  rows="5"></textarea> -->
+
+			</div>
+
+
+		</div>
+
+
+
+		<div id="myModal" class="modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Các chỉ tiêu thi đua </h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div id="myModal-body" class="modal-body">
 						
 					</div>
-				</div>
-				<!-- <button id="Export">Xuất biên bản</button> -->
-				<div>
-					<hr/>
-					<div id="output"></div>
-				</div>
-			</div>
-			<div id="myModal" class="modal">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title">Các chỉ tiêu thi đua </h4>
-							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-						</div>
-						<div id="myModal-body" class="modal-body">
-							
-						</div>
-						<div class="d-flex justify-content-center p-lg-3">
-							<button Id="btnCopy" class="btn btn-info">Copy nội dung</button>
-						</div>
-				<!-- <a href="#" rel="modal:close">Close</a> -->
+					<div class="d-flex justify-content-center p-lg-3">
+						<button Id="btnCopy" class="btn btn-info">Copy nội dung</button>
 					</div>
+			<!-- <a href="#" rel="modal:close">Close</a> -->
 				</div>
 			</div>
+		</div>
 	</body>
 </html>
 
@@ -89,7 +104,5 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script type="text/javascript" src="js/all.min.js"></script>
-<script src="javascript.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-<script type="text/javascript" src="js/all.min.js"></script>
-<script src="javascript.js"></script>
+<!-- <script src="javascript.js"></script> -->
+<script src="CalculateScore.js"></script>

@@ -180,9 +180,9 @@ body
 		width: 100%;
 	}
 }
-/* .modal p { 
-	margin: 1em 0; 
-} */
+#output { 
+	background-color: white;
+} 
 
 .modal a.close-modal {
 	border: none;
